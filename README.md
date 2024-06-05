@@ -7,14 +7,15 @@ Tired of endlessly scrolling through GitLab trying to find *that one* project? G
 - **Impatience:** Waiting? Not today.
 - **Efficiency:** I'm a developer, not a mouse-click marathon runner.
 - **This meme:**
+  
     ![Alt text](meme.jpg?raw=true "This Meme")
 
 ## Installation
 
 1. Git Python
-2. Git the `GitThereFast.py` script.
-3. Git a global shortcut to run the script.
-4. Git a GitLab Personal Access Token.
+2. Git the `main.py` script.
+3. Git a global shortcut to run the script (`python path/to/main.py`).
+4. Git a GitLab Personal Access Token and input it once.
 
 ## How to Use It
 
