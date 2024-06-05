@@ -122,33 +122,41 @@ def open_gitlab_project():
     if not token:
         return
 
-    root = tk.Tk()
+    root = Tk()
+    root.eval('tk::PlaceWindow . center')
     root.withdraw()
 
-    project_name = tk.simpledialog.askstring("GitLab Project Opener", "Enter project name:")
-    if not project_name:
+    query = simpledialog.askstring("Git There Fast", "Enter project name:", parent=root)
+    if not query:
         return
 
     gitlab_url = "https://gitlab.com/api/v4/projects"
-    params = {"search": project_name, "simple": True, "membership": True}
+    params = {"per_page": 1000, "membership": True, "order_by": "last_activity_at", "sort": "desc", "archived": False}
     headers = {"PRIVATE-TOKEN": token}
 
     response = requests.get(gitlab_url, params=params, headers=headers)
     if response.status_code == 200:
         projects = response.json()
+        projects = [p for p in projects if query.lower() in p['path_with_namespace'].lower()]
+
         if len(projects) == 1:
             project_url = projects[0]["web_url"]
             webbrowser.open(project_url)
+
         elif len(projects) > 1:
-            # Show listbox dialog for selection
-            project_names = [p["name"] for p in projects]
-            dialog = ListboxDialog(root, "Multiple Projects Found", project_names)
+            full_paths = [p['path_with_namespace'] for p in projects]
+            project_descriptions = strip_common_prefix(full_paths)
+
+            # Calculate the width of the longest string for the listbox
+            max_width = max(len(desc) for desc in project_descriptions) + 5
+
+            dialog = ListboxDialog(root, "Select Project", project_descriptions, max_width)
             if dialog.result is not None: # User made a selection
                 chosen_index = dialog.result
                 project_url = projects[chosen_index]["web_url"]
                 webbrowser.open(project_url)
         else:
-            messagebox.showinfo("GitLab Project Opener", "No matching projects found.")
+            messagebox.showinfo("Git There Fast", "No matching projects found.")
     else:
         messagebox.showerror("Error", f"GitLab API request failed with code {response.status_code}")
 
