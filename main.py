@@ -1,4 +1,5 @@
-from tkinter import BOTH, SINGLE, Listbox, simpledialog, messagebox, simpledialog, Tk
+import threading
+from tkinter import BOTH, SINGLE, Listbox, simpledialog, messagebox, Tk
 import requests
 import webbrowser
 import os
