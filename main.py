@@ -86,7 +86,7 @@ class ListboxDialog(simpledialog.Dialog):
             if index > 0:
                 self.listbox.selection_clear(index)
                 self.listbox.selection_set(index - 1)
-                self.listbox.activate(index - 1)
+                self.listbox.activate(index)
 
     def on_down_key(self, event):
         selection = self.listbox.curselection()
@@ -95,7 +95,7 @@ class ListboxDialog(simpledialog.Dialog):
             if index < len(self.choices) - 1:
                 self.listbox.selection_clear(index)
                 self.listbox.selection_set(index + 1)
-                self.listbox.activate(index + 1)
+                self.listbox.activate(index)
 
     def on_return_key(self, event):
         self.apply()
@@ -103,7 +103,15 @@ class ListboxDialog(simpledialog.Dialog):
     def apply(self):
         selection = self.listbox.curselection()
         if selection:
-            self.result = selection[0]  # Return the index of the selected item
+            self.result = selection[0] # Return the index of the selected item
+
+    # def show(self):
+    #     """Override the show method to center the dialog."""
+    #     self.update_idletasks()
+    #     self.geometry(f'{self.winfo_width()}x{self.winfo_height()}+{(self.winfo_screenwidth() // 2) - (self.winfo_width() // 2)}+{(self.winfo_screenheight() // 2) - (self.winfo_height() // 2)}')
+    #     self.deiconify()
+    #     self.focus_force()
+    #     self.wait_window()
 
 
 def open_gitlab_project():
