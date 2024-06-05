@@ -42,14 +42,29 @@ def get_gitlab_token():
         return None
 
 
-class ListboxDialog(tk.simpledialog.Dialog):
+def strip_common_prefix(strings=[]):
+    split_strings = [s.split('/') for s in strings]
+    min_length = min(len(parts) for parts in split_strings)
+
+    common_prefix_length = 0
+    for i in range(min_length):
+        if all(parts[i] == split_strings[0][i] for parts in split_strings):
+            common_prefix_length += 1
+        else:
+            break
+
+    return ['/'.join(parts[common_prefix_length:]) for parts in split_strings]
+
+
+class ListboxDialog(simpledialog.Dialog):
     """Custom dialog with a listbox for selection."""
-    def __init__(self, parent, title, choices):
+    def __init__(self, parent, title, choices, width):
         self.choices = choices
+        self.width = width
         super().__init__(parent, title)
 
     def body(self, master):
-        self.listbox = Listbox(master, selectmode=SINGLE, takefocus=True, activestyle="none")
+        self.listbox = Listbox(master, selectmode=SINGLE, width=self.width)
         for i, choice in enumerate(self.choices):
             self.listbox.insert(i, choice)
         self.listbox.pack(expand=True, fill=BOTH)
