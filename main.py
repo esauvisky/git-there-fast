@@ -1,5 +1,4 @@
-import tkinter as tk
-from tkinter import BOTH, SINGLE, Listbox, simpledialog, messagebox
+from tkinter import BOTH, SINGLE, Listbox, simpledialog, messagebox, simpledialog, Tk
 import requests
 import webbrowser
 import os
@@ -23,11 +22,13 @@ def get_gitlab_token():
         config.read(config_file)
         return config.get("GitLab", "token")
     except (configparser.NoSectionError, configparser.NoOptionError):
-        token = simpledialog.askstring(
-            "GitLab Token",
-            "Enter a GitLab Personal Access Token\n\n"
-            "You can generate one at 'https://gitlab.com/-/profile/personal_access_tokens' with 'read_api' scope.",
-            show="*")
+        root = Tk()
+        root.withdraw()
+        token = simpledialog.askstring("GitLab Token", "Enter a GitLab Personal Access Token\n\n"
+                                       "You can generate one at 'https://gitlab.com/-/profile/personal_access_tokens' with 'read_api' scope.",
+                                       show="*",
+                                       parent=root)
+        # center_window(root)
         if token:
             try:
                 os.makedirs(config_dir, exist_ok=True)
