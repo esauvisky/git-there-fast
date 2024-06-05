@@ -6,10 +6,22 @@ import os
 import configparser
 import json
 
-CONFIG_DIR = os.path.join(os.path.expanduser("~"), ".config", "GitThereFast")
+import platform
+
+def get_config_dir():
+    """Gets the configuration directory based on the operating system."""
+    if platform.system() == "Windows":
+        appdata = os.getenv('APPDATA')
+        if appdata is None:
+            return os.path.join(os.path.expanduser("~"), "AppData", "Local", "GitThereFast")
+        else:
+            return os.path.join(appdata, "GitThereFast")
+    else:
+        return os.path.join(os.path.expanduser("~"), ".config", "GitThereFast")
+
+CONFIG_DIR = get_config_dir()
 CONFIG_FILE = os.path.join(CONFIG_DIR, "config.ini")
 CACHE_FILE = os.path.join(CONFIG_DIR, "projects_cache.json")
-
 
 def get_gitlab_token():
     config = configparser.ConfigParser()
